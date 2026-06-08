@@ -106,62 +106,151 @@ Source attribution is enforced at two levels. First, the system prompt instructs
 
 ## Retrieval Test Results
 
-<!-- Run query.py on each question and paste the output here after running the pipeline -->
-
 **Query 1:** "When should I start looking for off-campus housing near Binghamton University?"
 
 Top returned chunks:
-- Chunk from `1rvqciw_whats_finding_off_campus_housing_like_now.txt` (distance: ___)
+- Chunk from `1rvqciw_whats_finding_off_campus_housing_like_now.txt` (distance: 0.2722)
   > "Start in September or October if you want to have real options. I made the mistake of waiting until January and we ended up settling for a place that had mold issues..."
-- Chunk from `1nc6xkk_off_campus_housing_for_2627.txt` (distance: ___)
+- Chunk from `1rvqciw_whats_finding_off_campus_housing_like_now.txt` (distance: 0.3459)
+- Chunk from `1nc6xkk_off_campus_housing_for_2627.txt` (distance: 0.3626)
   > "For the 26-27 cycle you should be looking right now. October and November are when most of the best units get snapped up..."
+- Chunk from `1rvqciw_whats_finding_off_campus_housing_like_now.txt` (distance: 0.3702)
+- Chunk from `11yt9kx_off_campus_housing.txt` (distance: 0.4101)
 
-*Why relevant:* Both chunks directly discuss timing for signing leases — the first from a student who waited too long, the second advising the same October/November window. These are the most precise possible sources for this question.
+*Why relevant:* The top three unique sources all contain explicit advice about lease timing. `1rvqciw` dominates retrieval (3 of 5 chunks) because it's an entire thread dedicated to finding housing "now" — the semantic match to the query is direct. `1nc6xkk` provides the current-cycle advice (October/November). Together they give both general guidance and cycle-specific urgency.
 
 **Query 2:** "Is it cheaper to live off campus than on campus at BU?"
 
 Top returned chunks:
-- Chunk from `11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt` (distance: ___)
+- Chunk from `11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt` (distance: 0.1954)
   > "On campus junior year in a standard double in Mountainview: ~$7,800/semester... Off campus I pay $575/month rent plus ~$90/month utilities plus ~$300/month food..."
+- Chunk from `11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt` (distance: 0.2488)
+- Chunk from `17j9ml5_is_it_better_to_live_offcampus.txt` (distance: 0.2733)
+- Chunk from `1n90nti_why_is_the_difference_between_on_campus_and_off.txt` (distance: 0.2747)
+- Chunk from `17j9ml5_is_it_better_to_live_offcampus.txt` (distance: 0.3191)
 
-*Why relevant:* This chunk contains exact numerical comparison between on-campus and off-campus costs at BU — the most direct possible answer to the question.
+*Why relevant:* The top chunk contains an exact numerical comparison between on-campus and off-campus costs at BU ($15,600/year vs. ~$8,700/year). The very low distance (0.1954) reflects a near-perfect semantic match — the query asks about cost difference and this chunk directly calculates it. The three additional sources confirm the pattern from different student perspectives.
 
 **Query 3:** "What are common problems students face with off-campus roommates?"
 
 Top returned chunks:
-- Chunk from `1phlycj_off_campus_terrible_roommate.txt` (distance: ___)
-  > "You need to have a direct conversation with this roommate... Document everything — the times they're loud, the times they haven't paid, any damage..."
-- Chunk from `11yt9kx_off_campus_housing.txt` (distance: ___)
+- Chunk from `11yt9kx_off_campus_housing.txt` (distance: 0.3329)
   > "Roommate compatibility is serious. Talk openly before signing anything about sleep schedules, cleanliness, guests, noise, and how expenses get split..."
+- Chunk from `17j9ml5_is_it_better_to_live_offcampus.txt` (distance: 0.3384)
+- Chunk from `1phlycj_off_campus_terrible_roommate.txt` (distance: 0.3506)
+  > "You need to have a direct conversation with this roommate... Document everything — the times they're loud, the times they haven't paid, any damage..."
+- Chunk from `16f7af6_living_offcampus.txt` (distance: 0.3620)
+- Chunk from `11yt9kx_off_campus_housing.txt` (distance: 0.3913)
 
-*Why relevant:* The first is from a thread explicitly about a bad roommate situation; the second gives preventive advice. Together they cover both the problem and the solution, directly matching the query.
-
-<!-- After running query.py, replace the distance placeholders above with actual values -->
+*Why relevant:* The retrieval pulls from both a general advice thread and the dedicated roommate-conflict thread (`1phlycj`). Together they cover preventive advice (establish expectations before signing) and reactive advice (document problems, communicate directly). The 0.33–0.39 distance range is expected for a broad topic that spans multiple documents rather than one dedicated thread.
 
 ---
 
 ## Example Responses
 
-<!-- Run app.py or query.py and paste at least 2 grounded responses + 1 refusal here -->
-
 **Response 1** — Query: "When should I start looking for off-campus housing near BU?"
 
 ```
-[Paste actual system output here after running query.py]
+You should start looking for off-campus housing near Binghamton University in September
+or October, as the good places near campus tend to go quickly, with most decent
+4-bedrooms being gone by November [source: 1rvqciw_whats_finding_off_campus_housing_like_now.txt].
+In fact, one commenter suggests that for the 2026-27 academic year, you should be
+looking right now, as October and November are when most of the best units get snapped
+up [source: 1nc6xkk_off_campus_housing_for_2627.txt]. Another commenter agrees that
+starting early is crucial — they formed their roommate group in August, started touring
+in September, and signed their lease in October, which was one of the last good units
+available at that complex [source: 1rvqciw_whats_finding_off_campus_housing_like_now.txt].
+Waiting until January may result in limited options, with overpriced or beat-up
+apartments being the only ones available [source: 1rvqciw_whats_finding_off_campus_housing_like_now.txt].
+
+Retrieved from:
+• 1rvqciw_whats_finding_off_campus_housing_like_now.txt
+• 1nc6xkk_off_campus_housing_for_2627.txt
+• 11yt9kx_off_campus_housing.txt
+
+Retrieval details (top chunks):
+  [1] 1rvqciw_whats_finding_off_campus_housing_like_now.txt  (distance: 0.2722)
+  [2] 1rvqciw_whats_finding_off_campus_housing_like_now.txt  (distance: 0.3459)
+  [3] 1nc6xkk_off_campus_housing_for_2627.txt  (distance: 0.3626)
+  [4] 1rvqciw_whats_finding_off_campus_housing_like_now.txt  (distance: 0.3702)
+  [5] 11yt9kx_off_campus_housing.txt  (distance: 0.4101)
 ```
 
 **Response 2** — Query: "Is it cheaper to live off campus than on campus at Binghamton?"
 
 ```
-[Paste actual system output here after running query.py]
+According to the source documents, living off campus can be significantly cheaper than
+living on campus at Binghamton University. One commenter calculated that they saved
+nearly $7,000 per year by living off campus, paying $965/month for rent, utilities,
+and food, compared to the on-campus cost of $15,600/year for housing and a partial
+meal plan [source: 11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt]. Another
+commenter mentioned that they saved close to $3,000/year by living off campus, even
+after accounting for utilities and food [source: 17j9ml5_is_it_better_to_live_offcampus.txt].
+However, it's also noted that the cost savings may vary depending on individual
+circumstances, such as financial aid packages [source: 11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt]
+and actual living costs [source: 1n90nti_why_is_the_difference_between_on_campus_and_off.txt].
+
+Retrieved from:
+• 11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt
+• 17j9ml5_is_it_better_to_live_offcampus.txt
+• 1n90nti_why_is_the_difference_between_on_campus_and_off.txt
+
+Retrieval details (top chunks):
+  [1] 11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt  (distance: 0.1954)
+  [2] 11tfz1t_how_much_cheaper_is_it_to_live_off_campus.txt  (distance: 0.2488)
+  [3] 17j9ml5_is_it_better_to_live_offcampus.txt  (distance: 0.2733)
+  [4] 1n90nti_why_is_the_difference_between_on_campus_and_off.txt  (distance: 0.2747)
+  [5] 17j9ml5_is_it_better_to_live_offcampus.txt  (distance: 0.3191)
+```
+
+**Response 2** — Query: "What do students say about the experience of living off campus for the first time?"
+
+```
+Students who have lived off campus for the first time mention that there is a significant
+amount of administrative friction that they were not prepared for, such as setting up
+internet, getting the gas turned on, and figuring out trash pickup day [source:
+16f7af6_living_offcampus.txt]. They also note that living off campus adds real
+responsibilities that can catch you off guard if you've never dealt with them before
+[source: 17j9ml5_is_it_better_to_live_offcampus.txt]. Additionally, students mention
+that living with friends can be revealing, as you learn a lot about people when you live
+with them, and you may have different standards for cleanliness and noise [source:
+16f7af6_living_offcampus.txt, 11yt9kx_off_campus_housing.txt]. Overall, the experience
+of living off campus for the first time can be surprising and requires adjusting to new
+responsibilities and living situations [source: 16f7af6_living_offcampus.txt].
+
+Retrieved from:
+• 16f7af6_living_offcampus.txt
+• gayjbc_off_campus_or_on_campus_housing_for_first_year.txt
+• 11yt9kx_off_campus_housing.txt
+• 17j9ml5_is_it_better_to_live_offcampus.txt
+
+Retrieval details (top chunks):
+  [1] 16f7af6_living_offcampus.txt  (distance: 0.3159)
+  [2] gayjbc_off_campus_or_on_campus_housing_for_first_year.txt  (distance: 0.3378)
+  [3] 11yt9kx_off_campus_housing.txt  (distance: 0.3479)
+  [4] 17j9ml5_is_it_better_to_live_offcampus.txt  (distance: 0.3780)
+  [5] 16f7af6_living_offcampus.txt  (distance: 0.3998)
 ```
 
 **Out-of-scope query** — Query: "What are the best pizza places near BU campus?"
 
 ```
-[Expected: "I don't have enough information in my documents to answer that."]
-[Paste actual system output here after running query.py]
+I don't have enough information in my documents to answer that.
+
+Retrieved from:
+• 1rjup0u_my_off_campus_experience.txt
+• 1rvqciw_whats_finding_off_campus_housing_like_now.txt
+• 1nc6xkk_off_campus_housing_for_2627.txt
+
+Retrieval details (top chunks):
+  [1] 1rjup0u_my_off_campus_experience.txt  (distance: 0.5226)
+  [2] 1rjup0u_my_off_campus_experience.txt  (distance: 0.5620)
+  [3] 1rvqciw_whats_finding_off_campus_housing_like_now.txt  (distance: 0.5951)
+  [4] 1nc6xkk_off_campus_housing_for_2627.txt  (distance: 0.6017)
+  [5] 1rvqciw_whats_finding_off_campus_housing_like_now.txt  (distance: 0.6094)
 ```
+
+*Note:* All five retrieved chunks have distances above 0.52 — indicating the query has no meaningful semantic match in the corpus. The system correctly refuses rather than hallucinating restaurant recommendations.
 
 ---
 
@@ -202,13 +291,11 @@ Retrieved from:
 
 | # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
 |---|----------|-----------------|------------------------------|-------------------|-------------------|
-| 1 | When should I start looking for off-campus housing near BU? | Start early — end of August/early fall is competitive; sign by October/November | | | |
-| 2 | Is it cheaper to live off campus than on campus at BU? | Yes — ~$3,000–7,000/year savings; per-room costs ~$450–600/month | | | |
-| 3 | What are common problems students face with off-campus roommates at BU? | Conflicts over chores, noise, guests, splitting utilities | | | |
-| 4 | What do students say about living off campus for the first time? | Freedom + lower cost, but unexpected responsibilities (landlords, utilities, cooking) | | | |
-| 5 | How do full-time students afford off-campus housing without working full-time? | Parental support, student loans, financial aid, packing roommates into cheaper units | | | |
-
-<!-- Run all 5 questions through query.py and fill in the "System response", "Retrieval quality", and "Response accuracy" columns -->
+| 1 | When should I start looking for off-campus housing near BU? | Start early — end of August/early fall is competitive; sign by October/November | System said start in September or October; most 4-bedrooms gone by November; waiting until January leaves only overpriced or beat-up options. Cited 1rvqciw and 1nc6xkk. | Relevant | Accurate |
+| 2 | Is it cheaper to live off campus than on campus at BU? | Yes — ~$3,000–7,000/year savings; per-room costs ~$450–600/month | System cited specific dollar amounts: $7,000/year savings, $965/month off-campus vs $15,600/year on-campus. Noted savings vary by financial aid situation. | Relevant | Accurate |
+| 3 | What are common problems students face with off-campus roommates at BU? | Conflicts over chores, noise, guests, splitting utilities | System covered cleanliness/noise incompatibility, financial unreliability (missed rent/utilities), guests causing tension, and friends being harder to live with than expected. Multiple sources cited. | Relevant | Accurate |
+| 4 | What do students say about living off campus for the first time? | Freedom + lower cost, but unexpected responsibilities (landlords, utilities, cooking) | System described administrative friction (internet setup, gas, trash), new responsibilities catching people off guard, and discovering different cleanliness/noise standards in friends. | Relevant | Accurate |
+| 5 | How do full-time students afford off-campus housing without working full-time? | Parental support, student loans, financial aid, packing roommates into cheaper units | System answered by discussing cost-splitting with roommates ($400–600/person in 4-person house), using financial aid, and doing the math on net cost vs. on-campus aid packages. Did not address the "without working" constraint directly — pivoted to cost reduction strategies. | Partially relevant | Partially accurate |
 
 **Retrieval quality:** Relevant / Partially relevant / Off-target  
 **Response accuracy:** Accurate / Partially accurate / Inaccurate
@@ -217,15 +304,15 @@ Retrieved from:
 
 ## Failure Case Analysis
 
-**Question that failed:** <!-- Fill in after running evaluation -->
+**Question that failed:** "How do full-time students afford off-campus housing without working full-time?"
 
-**What the system returned:** <!-- Fill in after running evaluation -->
+**What the system returned:** The system discussed splitting costs with roommates ($400–600/person/month in a 4-person house), using financial aid to cover off-campus costs, and comparing net costs once aid packages are factored in. It cited savings of ~$7,000/year. However, it did not address the question's specific constraint — *without working full-time* — and said nothing about parental support, student loans, or income substitutes. The retrieval distance scores (0.3566–0.3943) were noticeably higher than for the cost-comparison queries (as low as 0.1954), reflecting a weaker semantic match.
 
 **Root cause (tied to a specific pipeline stage):**
 
-One anticipated failure: Question 5 ("How do full-time students afford off-campus housing without working full-time?") may produce partially relevant retrieval because the phrase "afford off-campus housing" appears in cost-comparison threads, but none of the documents specifically address funding sources like parental support or student loans in isolation. The embedding model will find semantically similar chunks about cost, but those chunks discuss the total cost rather than how students finance it. This is a retrieval failure caused by the documents not directly addressing the query's specific angle — not a generation failure.
+This is a retrieval failure rooted in corpus coverage. The phrase "afford off-campus housing" embeds similarly to cost-comparison discussions, so the retrieval stage returns chunks about general cost savings rather than income sources. None of the 10 collected documents specifically discuss how students who don't earn income fund their housing — the corpus covers *how much* off-campus housing costs and *whether it's cheaper*, but not *where the money comes from*. The embedding model matched surface-level semantics ("afford," "housing," "campus") rather than the query's actual intent (funding strategies for non-working students). The generation stage then produced a reasonable-sounding but off-target answer by answering the question it *could* answer from context rather than the one that was asked.
 
-**What you would change to fix it:** Add documents that specifically discuss student budgeting, financial aid for off-campus students, or cost management strategies. Alternatively, rephrase the retrieval query to "student budgeting off campus" to better match available content.
+**What you would change to fix it:** Add documents covering student budgeting and income — threads about financial aid disbursement for off-campus housing, student loan usage, parental contributions, or work-study alternatives. Alternatively, a query rewrite layer could expand "afford without working" → "student financial aid off-campus housing funding" before retrieval, improving the semantic match.
 
 ---
 
